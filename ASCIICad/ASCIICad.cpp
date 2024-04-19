@@ -27,15 +27,18 @@ int main()
 
     // Loop to read and handle the next 100 input events
     while (true) {
+        
         // Wait for the events
         if (!ReadConsoleInput(hStdin, irInBuf, 128, &cNumRead))
             std::cout << "Error while reading console input" << std::endl;
- 
+
         // Dispatch the events
         for (DWORD i = 0; i < cNumRead; i++) {
             switch (irInBuf[i].EventType) {
             case MOUSE_EVENT: // Handle mouse input
-                std::cout << "Mouse event detected at (" << irInBuf[i].Event.MouseEvent.dwMousePosition.X << ", " << irInBuf[i].Event.MouseEvent.dwMousePosition.Y << ")" << std::endl;
+                if (irInBuf[i].Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
+                    std::cout << "Left mouse button clicked at (" << irInBuf[i].Event.MouseEvent.dwMousePosition.X << ", " << irInBuf[i].Event.MouseEvent.dwMousePosition.Y << ")" << std::endl;
+                }
                 break;
             default:
                 // Handle other events
